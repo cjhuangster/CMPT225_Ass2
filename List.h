@@ -31,7 +31,7 @@ private:
 	int maxElement[10];					// MAX_ELEMENTS
 	long int capacity=10000000000;      // Actual maximum capacity of element array   
 	Patient PList [10][1000000000];     // Data structure of element with capacity of MAX_ELEMENTS
-	int elementCount[10];               // Current element count in element array
+	int elementCount[10]={0};               // Current element count in element array
 	int ELEMENTCOUNT=0;					//Total Element Count;	
 
 public:
@@ -48,9 +48,6 @@ public:
 
 	// Description: Returns the total element count currently stored in List.
 	int getElementCount() const;
-
-	//Description: sorts the existing list in descending order.
-	void sortDescending (const int firstNumber) ;
 
 	// Description: Insert an element.
 	// Precondition: newElement must not already be in data collection.  

@@ -5,8 +5,8 @@
  *              Implementation of an int sequence with push/pop ...
  * Class Invariant: ... in a LIFO order
  *
- * Author:
- * Date:
+ * Author: Cheng Jie Huang
+ * Date: Sep 26, 2019
  */
  
 class Stack {

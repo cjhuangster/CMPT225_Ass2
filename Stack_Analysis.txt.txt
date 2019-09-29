@@ -1,0 +1,34 @@
+Time Efficiency of Stack.cpp
+
+        Stack();
+		Time Efficiency: O(1) 
+		Assigning NULL to head and tail
+
+
+        // Description: Destructor 
+        // Postcondition: All memory released
+        ~Stack();
+		Time Efficiency: O(1) 
+		Deletes head and tail
+
+        // Description: Insert newElement to the top of the stack. 
+        void push(int newElement);
+		Time Efficency: O(n)
+		The worst case scenario iterates through the entire stack of size n before inserting the element at the tail
+
+        // Description: Remove and return element at the top of the stack.
+        // Precondition: Stack is not empty   
+        int pop();
+		Time Efficiency: O(n)
+		The worst case scenario iterates through the entire stack of size n before removing the last element.
+
+        // Description: Return the topmost element of the stack.
+        // Precondition: Stack is not empty   
+        int peek() const;
+		Time Efficiency: O(1)
+		Assigns toPop as tails and returns toPop
+
+        // Description: Is stack empty? 
+        bool isEmpty() const;
+		Time Efficiency: O(1)
+		Simply checking if head==NULL.

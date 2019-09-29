@@ -16,9 +16,10 @@
 #include <string>
 #include "Patient.h"
 
+//Test code
 // int main(){
 // Patient *Michael = new Patient("6969696969");
-// Michael->setName("Dumbass");
+// Michael->setName("Dumb dumb");
 // cout<<Michael->getName()<<endl<<Michael->getCareCard()<<endl;
 // }
 

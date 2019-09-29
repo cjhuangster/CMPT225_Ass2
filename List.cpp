@@ -33,89 +33,83 @@ int List::getElementCount() const{
   return ELEMENTCOUNT;
 }
 
-//Description: sorts the existing list in descending order.
-void List::sortDescending (const int firstNumber)  {
-  int toCompare;
-  long int largest=10000000000;
-  int large=0;
-  int order[elementCount[firstNumber]];
-  for (int i=0;i<elementCount[firstNumber];i++){
-    large=0;
-    for (int j=0;j<elementCount[firstNumber];j++){
-      toCompare=stoi(PList[firstNumber][j].Patient::getCareCard());
-      if (toCompare>large&&toCompare<largest){
-        large=toCompare;
-        order[i]=j;
-      }  
-    }
-    largest=large;  
-  }
-  Patient temp [elementCount[firstNumber]];
-  for (int k = 0; k < elementCount[firstNumber]; k++)
-  {
-    temp[k]=PList[firstNumber][order[k]];
-  }
-  
-  for (int l = 0; l < elementCount[firstNumber]; l++)
-  {
-    //am I able to directly input the elements into their place?
-    PList[firstNumber][l]=temp[l];
-  }
-}
 
 	// Description: Insert an element.
 	// Precondition: newElement must not already be in data collection.  
 	// Postcondition: newElement inserted and elementCount has been incremented.   
 bool List::insert(const Patient& newElement){
-  bool inserted;
+  bool inserted=false;
   int firstNumber=(stoi(newElement.getCareCard())/100000000);
-
-  //how do I add in a new patient careCard as a part of the new profile?
-  PList[firstNumber][elementCount[firstNumber]]=Patient(newElement.getCareCard());
-  PList[firstNumber][elementCount[firstNumber]].Patient::setCareCard(newElement.Patient::getCareCard());
-  PList[firstNumber][elementCount[firstNumber]].Patient::setAddress(newElement.Patient::getAddress());
-  PList[firstNumber][elementCount[firstNumber]].Patient::setName(newElement.Patient::getName());
-  PList[firstNumber][elementCount[firstNumber]].Patient::setEmail(newElement.Patient::getEmail());
-  PList[firstNumber][elementCount[firstNumber]].Patient::setPhone(newElement.Patient::getPhone());
-  if (PList[firstNumber][elementCount[firstNumber]].Patient::getName()==newElement.Patient::getName()){
-    inserted=true;
+  int newCareCard=(stoi(newElement.getCareCard()));
+  int toPlace=0;
+  //This statement checks if the given carecard number is 10 digits long
+  if (newElement.getCareCard().size()!=10){
+    cout<<"Error: The given patient carecard number is not 10 digits!"<<endl;
   }
   else {
-    inserted=false;
+    //This loop checks to see if newElement's carecard number is equivalent to any within the existing system
+    for (int i=0;i<elementCount[firstNumber];i++){
+    int currentCareCard=stoi(PList[firstNumber][i].getCareCard());
+    if (currentCareCard==newCareCard){
+      cout<<"Error: The given patient carecard number is already in the system!"<<endl;
+    }
+    else if (newCareCard>currentCareCard){
+      toPlace=i;
+      //break out of loop by maxing out i counter
+      i=elementCount[firstNumber];
+      //increase both counters to account for added element
+      elementCount[firstNumber]++;  ELEMENTCOUNT++;
+    }
   }
-  sortDescending(firstNumber);
-  elementCount[firstNumber]++;  ELEMENTCOUNT++;
+  //This statement checks if the location to be placed is occupied or not
+  if (PList[firstNumber][toPlace].getCareCard()!="0000000000"){
+    //if the location to be placed is not occupied, shift every element within the current elementCount right by 1
+    for (int j=elementCount[firstNumber];j>toPlace;j++){
+    PList[firstNumber][j].setCareCard(PList[firstNumber][j-1].getCareCard());
+    PList[firstNumber][j].setAddress(PList[firstNumber][j-1].getAddress());
+    PList[firstNumber][j].setName(PList[firstNumber][j-1].getName());
+    PList[firstNumber][j].setEmail(PList[firstNumber][j-1].getEmail());
+    PList[firstNumber][j].setPhone(PList[firstNumber][j-1].getPhone());
+    }
+  }
+  //Insert the newElement at toPlace
+  PList[firstNumber][toPlace].setCareCard(newElement.getCareCard());
+  PList[firstNumber][toPlace].setAddress(newElement.getAddress());
+  PList[firstNumber][toPlace].setName(newElement.getName());
+  PList[firstNumber][toPlace].setEmail(newElement.getEmail());
+  PList[firstNumber][toPlace].setPhone(newElement.getPhone());
+  
+  //checks for equivalence of toPlace with the given newElement
+  if (PList[firstNumber][toPlace].getName()==newElement.getName()){
+    inserted=true;
+  }
   return inserted;
+
+  }
 }
 
 	// Description: Remove an element. 
 	// Postcondition: toBeRemoved is removed and elementCount has been decremented.	
 bool List::remove( const Patient& toBeRemoved ){
-  bool removed;
+  bool removed=false;
   int firstNumber=(stoi(toBeRemoved.getCareCard())/100000000);
-
+  //Check for equivalence between elements of the existing list with toBeRemoved
   for (int i=0;i<elementCount[firstNumber];i++){
     if (PList[firstNumber][i].getName()==toBeRemoved.getName()){
-      for (int j = i; j < (elementCount[firstNumber]-1); j++){
-        PList[firstNumber][j]=PList[firstNumber][j+1];//do we have to use insert() instead as PList cannot be openly accessed or can PList be modified?
-        //PList[j+1]=NULL;
+      //Appropriately decrementing both elementcounts.
+      elementCount[firstNumber--]; ELEMENTCOUNT--;
+      //If toBeRemoved is matched with an element within the current list, every element to the right will shift left by 1.
+      for (int j=i; j<=(elementCount[firstNumber]); j++){
+        PList[firstNumber][j].setCareCard(PList[firstNumber][j+1].getCareCard());
+        PList[firstNumber][j].setAddress(PList[firstNumber][j+1].getAddress());
+        PList[firstNumber][j].setName(PList[firstNumber][j+1].getName());
+        PList[firstNumber][j].setEmail(PList[firstNumber][j+1].getEmail());
+        PList[firstNumber][j].setPhone(PList[firstNumber][j+1].getPhone());
       }
     }
+    removed=true;
   }
-  //should we make the last elementCount NULL?
-  elementCount[firstNumber--]; ELEMENTCOUNT--;
-
-  sortDescending(firstNumber);
-  for (int i=0;i<elementCount[firstNumber];i++){
-    if (PList[firstNumber][i].getName()==toBeRemoved.getName()){
-      removed=false;
-      i=elementCount[firstNumber];
-    }
-    else {
-      removed=true;
-    }
-    return removed;
-  }
+  return removed;
 }
 
 // Description: Remove all elements.
@@ -131,25 +125,27 @@ void List::removeAll(){
 	//              Returns a pointer to the element if found,
 	//              otherwise, returns NULL.
 Patient* List::search(const Patient& target){
-   Patient *ptr;
-   ptr=NULL;
-   for (int i=0;i<10;i++){
-     for (int j=0; j < elementCount[i]; j++)
+  int firstNumber=(stoi(target.getCareCard())/100000000);
+  Patient *ptr;
+  ptr=NULL;
+  for (int i=0; i < elementCount[firstNumber]; i++)
      {
-       if (PList[i][j].getName()==target.getName()){
-      ptr=&PList[i][j];
+       //If target is equivalent to any element within the current list, return the ptr to that element
+       if (PList[firstNumber][i].getName()==target.getName()){
+      ptr=&PList[firstNumber][i];
       }
      }
-    }
-    return ptr;
+  return ptr;
 }
 
 // Description: Prints all elements stored in List by descending order of care card numbers
 void List::printList(){
+  //Iterates through all of the current list and prints out every element.
  for (int i = 0; i < 10; i++) {
-  for (int j = 0; j < elementCount[i]; j++)
-  {
+  for (int j = 0; j < elementCount[i]; j++){
     cout<<PList[i][j];
   }
  }
 }
+
+//end of List.cpp

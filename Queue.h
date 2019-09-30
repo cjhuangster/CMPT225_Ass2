@@ -12,19 +12,22 @@
 class Queue {
     private:
         static unsigned const INITIAL_SIZE = 6;
-        int elements[INITIAL_SIZE];  
+        int *elements=new int[INITIAL_SIZE];  
 
-        unsigned elementCount;  // number of elements in the queue
-        unsigned capacity;      // number of cells in the array
-        unsigned frontindex;    // index the topmost element
-        unsigned backindex;     // index where the next element will be placed
+        unsigned int elementCount=0;  // number of elements in the queue
+        unsigned int capacity=INITIAL_SIZE;      // number of cells in the array
+        unsigned int frontindex=0;    // index the topmost element
+        unsigned int backindex=0;     // index where the next element will be placed
 
     public:
         // Description: Constructor
         Queue();
 
+        void replaceElement(const int &anElement,int i);
+        void biggerQueue();
+        void smallerQueue();
 
-        // Description: Inserts newElement at the back (O(1))
+        // Description: Inserts newElement at the back (O(1))  
         void enqueue(int newElement);
 
  

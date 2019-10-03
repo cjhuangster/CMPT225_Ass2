@@ -12,13 +12,13 @@
 #include "Queue.h"
 #include <iostream>
 #include <ostream>
+#include <stdio.h>
 using namespace std;
 
 int main () {
     Queue Q;
-
     // enqueue 1, 2, 3, 4, 5
-    for (int i = 1; i <= 5; i++) {
+    for (int i = 1; i <= 20; i++) {
         cout << "enqueue " << i << endl;
         Q.enqueue(i);
  
@@ -26,7 +26,7 @@ int main () {
 
 
     // dequeue 2x elements
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 5; i++) {
         int y = Q.peek();
         cout << "peek " << y << endl;
         Q.dequeue();
@@ -34,7 +34,7 @@ int main () {
 
 
     // enqueue 6, 7, 8, 9, 10
-    for (int i = 6; i <= 10; i++) {
+    for (int i = 20; i <= 40; i++) {
         cout << "enqueue " << i << endl;
         Q.enqueue(i);
     }
@@ -67,66 +67,34 @@ void Queue::enqueue(int newElement) {
     elementCount++;
     backindex = (backindex + 1) % capacity;
 
-    //cout<<"current queue"<<endl;
-    for (int i=0;i<capacity;i++){
-    //    cout<<"iq: "<<i<<" "<<elements[i]<<endl;
-    }
-
     if (elementCount>=capacity){
-       biggerQueue();
+        resizeArray(elements,capacity,2);
+        capacity*=2;
     }
-    // for (int i=0; i<capacity+2;i++){
-    //     cout<< "i:q:"<<i<<elements[i]<<endl;
-    // }
 } 
 
-void Queue::replaceElement(const int &anElement,int i){
-    elements[i]=anElement;
+void Queue::resizeArray(int *&anArray, int size, float multiplier){
+    int newSize=(int)size*multiplier;
+    int *resized = new int [newSize];
+    for (int i=0;i< elementCount;i++){
+        resized[i]=anArray[(i+frontindex)%size];
+    }
+    delete[]anArray;
+    anArray=resized;
+    frontindex=0;
+    backindex=elementCount;
 }
 
-
-void Queue::biggerQueue(){
-        unsigned int newCapacity=capacity*2;
-        int *temp = new int[newCapacity];
-        //cout<<"temp:"<<endl;
-        for (int i=0;i<elementCount;i++){
-            temp[i]=elements[(i+frontindex)%capacity];
-        }
-        delete[]elements;
-        //elements=NULL;
-        capacity=capacity*2;
-        int *elements=new int[capacity];
-        for (int i=0;i<elementCount;i++){
-            replaceElement(temp[i],i);
-        }
-        // cout<<"new queue:"<<endl;
-        // for (int i=0;i<capacity;i++){
-        //     cout<<" i:q: "<<i<<" "<<elements[i]<<endl;
-        // }
-        delete[]temp;
-        temp=NULL;
-        frontindex=0;
-        backindex=elementCount;
-}
-
-
-void Queue::smallerQueue(){
-        unsigned int newCapacity=capacity*2;
-        int *temp = new int[newCapacity];
-        //cout<<"temp:"<<endl;
-
-}
 
 // Description: Removes the frontmost element (O(1))
 // Precondition: Queue not empty
 void Queue::dequeue() {
-    //elements[frontindex]=0;
+    elements[frontindex]=0;
     elementCount--;
-    frontindex = (frontindex + 1) % capacity;
-    //cout<<endl<<"elementCount: "<<elementCount<<endl;
-    if (elementCount<(capacity/2)&&((capacity/2)>=INITIAL_SIZE)){
-        cout<<"Queue needs to be smaller!"<<endl;
-        smallerQueue();
+    frontindex = (frontindex+1) % capacity;
+    if (elementCount<(capacity/4)&&((capacity/2)>INITIAL_SIZE)){
+        resizeArray(elements, capacity, 0.5);
+        capacity/=2;
     }
 }
 
@@ -142,6 +110,3 @@ int Queue::peek() const {
 bool Queue::isEmpty() const {
     return elementCount == 0;
 } 
-
-
-

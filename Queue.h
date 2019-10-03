@@ -12,8 +12,8 @@
 class Queue {
     private:
         static unsigned const INITIAL_SIZE = 6;
-        int *elements=new int[INITIAL_SIZE];  
-
+        int *elements=new int[INITIAL_SIZE]; 
+        // int *temp=new int[INITIAL_SIZE];
         unsigned int elementCount=0;  // number of elements in the queue
         unsigned int capacity=INITIAL_SIZE;      // number of cells in the array
         unsigned int frontindex=0;    // index the topmost element
@@ -23,9 +23,7 @@ class Queue {
         // Description: Constructor
         Queue();
 
-        void replaceElement(const int &anElement,int i);
-        void biggerQueue();
-        void smallerQueue();
+        void resizeArray(int *&anArray, int size, float multiplier);
 
         // Description: Inserts newElement at the back (O(1))  
         void enqueue(int newElement);
@@ -44,4 +42,3 @@ class Queue {
         // Description: Returns true if and only if queue empty (O(1))
         bool isEmpty() const;
 };
-
